@@ -1,5 +1,6 @@
-Detectword_pico: A Go Spoken Word Detector for the Raspi Pico - Ray Schuler 2022.04.14
---------------------------------------------------------------------------------------
+Detectword_pico: A Go Spoken Word Detector for the Raspi Pico
+-------------------------------------------------------------
+2022.04.14
 
 Under Construction -- Come back soon
 ------------------------------------
@@ -100,6 +101,9 @@ The Tinygo v0.21 compiler is based on Go v1.17.6
 'detectword.go' includes functions specific to the detectword application.  
 'utils_dw.go' includes functions applicable to a wider range of DSP applications. 
 'fft.go' and 'errors.go' are manually included from the go-fft package, as Tinygo v0.21 does not support all dependencies.
+
+Ray Schuler
+schuler at usa.com
 
 References
 ----------
