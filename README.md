@@ -17,9 +17,11 @@ The Detectword_pico project uses Tinygo (ref-tinygo), a Go compiler for embedded
 
 Popular techniques for spoken word classification involve creating a spectrogram (@ref-spectrogram), which encapsulates time and frequency characteristics into a two dimensional array.  Spectrogram arrays are well suited for image representations, and image processing techniques.  The spectrogram in Figure (1) represents the word 'raspberry' as captured by the Pico analog to digital converter (ADC), and processed by Detectword_pico.  The colors  represent the frequency amplitude in the indexed frequency bin (vertical), during the indexed time bin (horizontal). The colors range from blue to red, representing low and high intensity, respectively.  
 
-<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/xt-raspberry-4096-250.png" width="400" height="300">
-<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-raspberry-4096-250-64.png" width="400" height="300">
-<br>
+<p float="left">
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/xt-raspberry-4096-250.png" width="400" height="300" />
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-raspberry-4096-250-64.png" width="400" height="300" />
+</p>
+
 Figure (1): A 4096 sample time domain waveform and spectrogram of the spoken word ‘raspberry’.
 
 Image classification is often accomplished by machine learning techniques (ML) like training a convolutional neural network (ConvNet) (ref-convnet). ConvNets are incredibly good at classifying images, including spectrograph images. A wake word detection project on the Pico using machine learning techniques is listed in the references (@ref-ml-pico).
@@ -47,19 +49,22 @@ The default tuning parameters in Detectword_pico include a frequency bin range o
 
 Figures (2-4) show spectrograms, and their reduced counterparts, for the words 'on' and 'off'.  The final reduced arrays in Figure (4) are used to determine if a target word closely resembles a reference word. The images of the spectrograms and reduced arrays encode increasing frequency power values ranging from blue to red. 
 
-<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-on-4096-250-64.png" width="400" height="300">
-<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-off-4096-250-64.png" width="400" height="300">
-<br>
+<p float="left">
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-on-4096-250-64.png" width="400" height="300" />
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-off-4096-250-64.png" width="400" height="300" />
+</p>
 Figure (2) Spectrographs of the words 'on' and 'off'; 4096 samples, 64 time bins, and 64 frequency bins
 
-<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-on-4096-250-64.png" width="400" height="300">
-<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-off-4096-250-64.png" width="400" height="300">
-<br>
+<p float="left">
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-on-4096-250-64.png" width="400" height="300" />
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-off-4096-250-64.png" width="400" height="300" />
+</p>
 Figure (3) The average pooling spectrographs of 'on' and 'off', reduced from Figure (1)
 
-<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-on-4096-250-64.png" width="400" height="300">
-<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-off-4096-250-64.png" width="400" height="300">
-<br>
+<p float="left">
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-on-4096-250-64.png" width="400" height="300" />
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-off-4096-250-64.png" width="400" height="300" />
+<p>
 Figure (4) The peak value pooling spectrographs 'on' and 'off', reduced from Figure (3)
 
 While the Pico has sufficient memory to set Detectword_pico's 'buf_size' to 4096 samples, the response time is large-- on the order of 2 seconds.  As part of the tuning process, I determined that 1024 samples provide reasonably good detection with a greatly reduced response time.  The response time to process single syllable words from 1024 ADC samples is in the hundreds of milliseconds range. The demonstration video above processes a 1024 sample voice waveform.
