@@ -16,8 +16,8 @@ The Detectword_pico project uses the Tinygo Go language compiler for embedded en
 
 Popular techniques for spoken word classification involve creating a spectrogram (@ref-spectrogram), which encapsulates time and frequency characteristics into a 2 dimensional scalar array.  These arrays are well suited to visual image representations, and image manipulation techniques.  The spectrogram in Figure (1) represents the word 'raspberry' generated from a 4096 voice sample captured by the Pico's analog to digital converter (ADC).  The colors represent the signal intensity in the indexed frequency bin (vertical), during the indexed time bin (horizontal). The colors range from blue to red, representing low and high intensity, respectively.  
 
-![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-raspberry-4096-250-64.png)
 ![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/xt-raspberry-4096-250.png)
+![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-raspberry-4096-250-64.png)
 
 Figure (1): A 4096 sample time domain wavform and spectrogram of the spoken word ‘raspberry’.
 
@@ -46,17 +46,19 @@ The default tuning parameters in Detectword_pico include a frequency bin range o
 
 Figures (2-4) show spectrograms, and their reduced counterparts, for the words 'on' and 'off'.  The final reduced arrays in Figure (4) are used to determine if a target word closely resembles a reference word. The images of the spectrograms and reduced arrays encode increasing frequency power values ranging from blue to red. 
 
-![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/writeups/detectword_pico_v0p6/spect-on-4096-250-64.png)
-![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/writeups/detectword_pico_v0p6/spect-off-4096-250-64.png)
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-on-4096-250-64.png" width="400" height="300">
+
+![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-on-4096-250-64.png)
+![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-off-4096-250-64.png)
 
 Figure (2) Spectrographs of the words 'on' and 'off'; 4096 samples, 64 time bins, and 64 frequency bins
 
-![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/writeups/detectword_pico_v0p6/pool-avg-on-4096-250-64.png)
-![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/writeups/detectword_pico_v0p6/pool-avg-off-4096-250-64.png)
+![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-on-4096-250-64.png)
+![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-off-4096-250-64.png)
 
 Figure (3) The average pooling spectrographs of 'on' and 'off', reduced from Figure (1)
-![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/writeups/detectword_pico_v0p6/pool-peak-on-4096-250-64.png)
-![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/writeups/detectword_pico_v0p6/pool-peak-off-4096-250-64.png)
+![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-on-4096-250-64.png)
+![alt](https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-off-4096-250-64.png)
 
 Figure (4) The peak value pooling spectrographs 'on' and 'off', reduced from Figure (3)
 
