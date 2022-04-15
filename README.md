@@ -1,10 +1,11 @@
 Detectword_pico: A Go Spoken Word Detector for the Raspi Pico - Ray Schuler 2022.04.14
+--------------------------------------------------------------------------------------
 
-Under Construction -- Come back soon.
----------------
+Under Construction -- Come back soon
+------------------------------------
 
 Summary
-—-----
+-------
 Detectword_pico is a system to compare spoken words with a predefined reference word, setting a logic output pin based on the detected word. When the system is powered on, the first two received words become the reference words. Subsequent words are compared to the reference words, and the output pin is set accordingly. An example usage is learning the words 'on' and 'off' to control a lamp, as shown in the following video.  The software is written in the Go (@go-ref) programming language and compiled with Tinygo (@ref-gof).  The hardware target is a Raspberry Pi Pico (@ref-pico). The design attempts to achieve reasonable voice control, with minimal resources.
 
 https://youtu.be/cquPffC5l68
@@ -12,7 +13,7 @@ https://youtu.be/cquPffC5l68
 Video demonstration: Detectword_pico controlling a lamp
 
 Discussion
-—--------
+----------
 The Detectword_pico project uses Tinygo (ref-tinygo), a Go compiler for embedded environments, to create a word detector, commonly referred to as a 'hot word' or 'wake word' detector. The target hardware is the Raspberry Pi Pico, a low cost and high function ARM microcontroller with analog inputs and general purpose digital I/O.
 
 Popular techniques for spoken word classification involve creating a spectrogram (@ref-spectrogram), which encapsulates time and frequency characteristics into a two dimensional array.  Spectrogram arrays are well suited for image representations, and image processing techniques.  The spectrogram in Figure (1) represents the word 'raspberry' as captured by the Pico analog to digital converter (ADC), and processed by Detectword_pico.  The colors  represent the frequency amplitude in the indexed frequency bin (vertical), during the indexed time bin (horizontal). The colors range from blue to red, representing low and high intensity, respectively.  
@@ -38,7 +39,8 @@ I set out to accomplish three objectives with Detectword_pico:
 
 3) Implement low cost voice controlled lighting in my home, without relying on internet based services.
 
-The Process:
+The Process
+-----------
 Upon power up, detectword_pico captures two reference words with one of the Pico's ADC.  These reference words are normalized in both amplitude and time, before being converted to spectrographs and reduction techniques are applied.  The same process is applied to subsequent spoken words, and a sum squared error of the reduced data between the reference and target word is calculated.  This sum squared error value is used to predict if the target word matches one of the reference words.  The 0V-3.3V logic state of a GPIO pin tracks the last detected reference word. For example 'on' or 'off'.  When neither reference word is detected, the GPIO state remains unchanged.
 
 The detectword.go function CreateU16SpectFromU16() converts the voice samples into a two  dimensional spectrograph array. The input waveform of 'buf_size' samples is normalized and broken into 'Tbins' time segments. Each time segment is filtered by a Hamming window (@ref-hamming) to suppress the discontinuities created by segmenting the data. The filtered segments are then converted to the frequency domain, generating 'Fbins' values for the spectrograph. It was important to use an 'in place' discrete fourier transform (DFT) algorithm (@ref-tukey) to conserve memory on the Pico.  Detectword pico relies on the FOSS go-fft package (@ref-go-fft)to generate DFTs.
@@ -75,7 +77,6 @@ The parameters used to tune word detection are capture sample size in bytes (buf
 
 Possible Improvements
 ---------------------
-
 Word detection would likely improve by low pass filtering the microphone ADC input to limit the aliasing of frequencies above the Nyquest rate.  Empirically, I found most meaningful data from my voice is between 200Hz-400Hz. The generated spectrograms include some aliasing, though  this has not prevented reasonable word detection.
 
 Adding automatic gain control to the microphone would improve detection performance for words spoken at different distances or loudness than the recorded reference words.
@@ -87,20 +88,21 @@ Negative spectrogram frequencies are maintained in detectword_pico for image aes
 Allowing the spectrogram time bins to overlap would reintroduce valid detection data suppressed by the Hamming filter, at the expense of increased memory use and response time.
 
 Conclusions
-—-------
+-----------
 While ConvNets and other machine learning techniques provide powerful tools for speech detection, this project shows they are not strictly required for simple word detection on a low cost microcontroller.  The techniques employed by Detectword_pico provide a reasonably good solution for a voice controlled lamp.
 
 The Go language (ref-go), and the memory efficient Tinygo compiler (ref-tinygo), exceeded my expectations for developing on the Pico.  The code is written with standard Go libraries, with the exception of the memory efficient "in place" DFT implementation from the go-fft package (ref-go-fft).
 
 Software Details
-—------------
+----------------
 The Tinygo v0.21 compiler is based on Go v1.17.6
 'detectword_pico.go' is the main() entry point of the program
 'detectword.go' includes functions specific to the detectword application.  
 'utils_dw.go' includes functions applicable to a wider range of DSP applications. 
 'fft.go' and 'errors.go' are manually included from the go-fft package, as Tinygo v0.21 does not support all dependencies.
 
---
+References
+----------
 (@ref-go) https://go.dev
 (@ref-tinygo) https://github.com/tinygo-org
 (@ref-spectrogram) https://en.wikipedia.org/wiki/Spectrogram
