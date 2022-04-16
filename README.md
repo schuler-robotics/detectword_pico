@@ -21,6 +21,7 @@ Popular techniques for spoken word classification involve creating a spectrogram
 </p>
 Figure (1): A 4096 sample time domain waveform and spectrogram of the spoken word ‘raspberry’.
 <br />
+<br />
 
 
 Image classification is often accomplished by machine learning techniques (ML) like training a convolutional neural network (ConvNet) (ref-convnet). ConvNets are incredibly good at classifying images, including spectrograph images. A wake word detection project on the Pico using machine learning techniques is listed in the references (@ref-ml-pico).
@@ -51,6 +52,7 @@ Figure (2) shows the calculated spectrograms for the words 'on' and 'off'.  Imag
 </p>
 Figure (2) Spectrographs of the words 'on' and 'off'; 4096 samples, 64 time bins, and 64 frequency bins
 <br />
+<br />
 
 Data reduction of the spectrographs consists of a two stage pooling process, reducing the memory and processing requirements of comparison.  The first pooling operation steps a rectangular window with a size determined by 'block' parameters across the spectrogram, creating a reduced two dimensional array with elements equal to the average value of spectrogram elements under that window position.  The second pooling stage repeats the process returning the peak value of a smaller window stepped across the array which resulted from average pooling. Pooling differs from convolution in that the window positions do not overlap.
 
@@ -64,6 +66,7 @@ Figure (3) shows the reduced spectrograms for the 'on' and 'off' spectrograms of
 </p>
 Figure (3) Average and peak pooling results from the spectrographs representing words 'on' and 'off'.
 <br />
+<br />
 
 The default tuning parameters in Detectword_pico include a frequency bin range of approximately -1.8Khz to 1.8Khz, with time bins ranging from 0sec to approximately 300msec.  The block sizes for average and peak pooling are 8x8 and 4x4, respectively. These values are adequate for single syllable human voice word detection.
 
@@ -74,6 +77,7 @@ While the Pico has sufficient memory to set Detectword_pico's 'buf_size' to 4096
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-off-1024-250-16.png" width="400" height="300" />
 </p>
 Figure (4) Spectrographs of the words 'on' and 'off'; 1024 samples, 16 time bins, and 16 frequency bins
+<br />
 <br />
 
 Voice waveforms for Detectword_pico are obtained with a piezo microphone into a Maxim 4466 amplifier output to the Pico ADC. In addition to the tuning parameters previously described, Detectword_pico includes threshold parameters to gate capture and remove leading and trailing "quiet" periods.  Capture begins when the ADC detects a sound level above the software parameter 'threshold'. The capture continues until 'buf_size' samples have been collected. The end of the capture buffer is truncated of sounds below 'threshold'.  Removing "quiet" samples from the end of the buffer allows the sample waveform to be normalized in both amplitude and time, improving reference to target comparisons.  Another threshold parameter, 'SpectThresh', limits low amplitude noise in the spectrograms.
