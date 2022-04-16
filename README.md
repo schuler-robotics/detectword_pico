@@ -56,9 +56,9 @@ Data reduction of the spectrographs consists of a two stage pooling process, red
 Figure (3) shows the reduced spectrograms for the 'on' and 'off' spectrograms of Figure (2).  The smaller peak value arrays are used to predict how closely the target word matches a reference word.
 
 <p float="left">
-<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-on-4096-250-64.png" width="300" height="300" />
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-on-4096-250-64.png" width="200" height="200" />
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-on-4096-250-64.png" width="150" height="150" />
-<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-off-4096-250-64.png" width="300" height="300" />
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-off-4096-250-64.png" width="200" height="200" />
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-off-4096-250-64.png" width="150" height="150" />
 </p>
 Figure (3) Average and peak pooling results from the spectrographs representing words 'on' and 'off'.
@@ -110,11 +110,13 @@ schuler at usa.com
 
 References
 ----------
-(@ref-go) https://go.dev
-(@ref-tinygo) https://github.com/tinygo-org
-(@ref-spectrogram) https://en.wikipedia.org/wiki/Spectrogram
-(@ref-convnet) https://developers.google.com/machine-learning/practica/image-classification/convolutional-neural-networks
-(@ref-ml-pico) https://github.com/henriwoodcock/pico-wake-word
-(@ref-hamming) https://stackoverflow.com/questions/5418951/what-is-the-hamming-window-for
-(@ref-tukey) https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm
-(@ref-go-fft) https://github.com/ledyba/go-fft/blob/master/LICENSE
+<p>
+(@ref-go) https://go.dev<br>
+(@ref-tinygo) https://github.com/tinygo-org<br>
+(@ref-spectrogram) https://en.wikipedia.org/wiki/Spectrogram<br>
+(@ref-convnet) https://developers.google.com/machine-learning/practica/image-classification/convolutional-neural-networks<br>
+(@ref-ml-pico) https://github.com/henriwoodcock/pico-wake-word<br>
+(@ref-hamming) https://stackoverflow.com/questions/5418951/what-is-the-hamming-window-for<br>
+(@ref-tukey) https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm<br>
+(@ref-go-fft) https://github.com/ledyba/go-fft/blob/master/LICENSE<br>
+</p>
