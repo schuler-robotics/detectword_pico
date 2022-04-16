@@ -4,13 +4,8 @@ Detectword_pico: A Go Spoken Word Detector for the Raspi Pico
 
 Detectword_pico is a system to compare spoken words with a predefined reference word, setting a logic output pin based on the detected word. When the system is powered on, the first two received words become the reference words. Subsequent words are compared to the reference words, and the output pin is set accordingly. An example usage is learning the words 'on' and 'off' to control a lamp, as shown in the following video.  The software is written in the Go (@go-ref) programming language and compiled with Tinygo (@ref-gof).  The hardware target is a Raspberry Pi Pico (@ref-pico). The design attempts to achieve reasonable voice control, with minimal resources.
 
-ifdef::env-github[]
-image:https://img.youtube.com/vi/cquPffC5l68/maxresdefault.jpg[link=https://youtu.be/cquPffC5l68]
-endif::[]
-
-ifndef::env-github[]
-video::cquPffC5l68[youtube]
-endif::[]
+<p float="left">
+<img src="https://img.youtube.com/vi/cquPffC5l68/maxresdefault.jpg" width="200px" />(https://youtu.be/cquPffC5l68)
 
 Discussion
 ----------
@@ -60,9 +55,9 @@ Figure (3) shows the reduced spectrograms for the 'on' and 'off' spectrograms of
 
 <p float="left">
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-on-4096-250-64.png" width="300" height="300" />
-<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-on-4096-250-64.png" width="200" height="200" />
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-on-4096-250-64.png" width="150" height="150" />
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-off-4096-250-64.png" width="300" height="300" />
-<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-off-4096-250-64.png" width="200" height="200" />
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-off-4096-250-64.png" width="150" height="150" />
 </p>
 Figure (3) Average and peak pooling results from the spectrographs representing words 'on' and 'off'.
 <br>
