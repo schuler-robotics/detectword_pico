@@ -2,9 +2,9 @@ Detectword_pico: A Go Spoken Word Detector for the Raspi Pico
 -------------------------------------------------------------
 2022.04.14
 
-Detectword_pico is a system to compare spoken words with a predefined reference word, setting a logic output pin based on the detected word. When the system is powered on, the first two received words become the reference words. Subsequent words are compared to the reference words, and the output pin is set accordingly. An example usage is learning the words 'on' and 'off' to control a lamp, as shown in the following video.  The software is written in the Go (@go-ref) programming language and compiled with Tinygo (@ref-gof).  The hardware target is a Raspberry Pi Pico (@ref-pico). The design attempts to achieve reasonable voice control, with minimal resources.
+Detectword_pico is a system to compare spoken words with a predefined reference word, setting a logic output pin based on the detected word. When the system is powered on, the first two received words become the reference words. Subsequent words are compared to the reference words, and the output pin is set accordingly. The Detectword_pico circuit image below links to a demonstration video of words 'on' and 'off' controlling a lamp.  The software is written in the Go (@go-ref) programming language and compiled with Tinygo (@ref-gof).  The hardware target is a Raspberry Pi Pico (@ref-pico). The design attempts to achieve reasonable voice control, with minimal resources.
 
-<p float="left">
+<p float="center">
 <center><a href="https://youtu.be/cquPffC5l68" title="Video demonstration"><img src="https://img.youtube.com/vi/cquPffC5l68/maxresdefault.jpg" width="350px"/></a></center>
 <br>
 
