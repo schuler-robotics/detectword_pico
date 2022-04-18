@@ -29,7 +29,7 @@ The use of spectrograms turns word detection into an image classification proble
 
 The drawbacks of ML solutions include complexity, processing requirements for training operation, and training data requirements. ML models are trained on machines significantly more powerful than the Pico, and transferred to the target hardware.
 
-Detectword_pico uses data reduction and comparison to affect simple word detection whith less complexity and lower resource requirements than ML solutions.  
+Detectword_pico uses data reduction and comparison to affect simple word detection with less complexity and lower resource requirements than ML solutions.  
 
 Popular 'smart speakers' rely on machine learning techniques and process voice recordings on remote servers, even when the device under control (e.g. a lamp) is inches away.  Sending voice data to servers outside of the end user's control involves privacy issues that may not be justified for single word voice control.
 
@@ -43,9 +43,9 @@ I set out to accomplish three objectives with Detectword_pico:
 
 The Process
 -----------
-Upon powering up, detectword_pico captures two reference words with one of the Pico's ADC.  These reference words are normalized in both amplitude and time, before being converted to spectrographs and reduction techniques are applied.  The same process is applied to subsequent spoken words, and a sum squared error of the reduced data between the reference and target word is calculated.  This sum squared error is used to predict if the target word matches one of the reference words.  The 0V-3.3V logic state of a GPIO pin tracks the last detected reference word. For example 3.3V for 'on', and 0V for 'off'.  When neither reference word is detected, the GPIO state remains unchanged.
+Upon powering up, detectword_pico captures two reference words with one of the Pico's ADC.  These reference words are normalized in both amplitude and time, before being converted to spectrograms and reduction techniques are applied.  The same process is applied to subsequent spoken words, and a sum squared error of the reduced data between the reference and target word is calculated.  This sum squared error is used to predict if the target word matches one of the reference words.  The 0V-3.3V logic state of a GPIO pin tracks the last detected reference word. For example 3.3V for 'on', and 0V for 'off'.  When neither reference word is detected, the GPIO state remains unchanged.
 
-The detectword.go function CreateU16SpectFromU16() converts voice samples into a two  dimensional spectrograph array. An input waveform of 'buf_size' samples is normalized and broken into 'Tbins' time segments. Each time segment is filtered by a Hamming window (@ref-hamming) to suppress the discontinuities created by segmentation. The filtered segments are converted to the frequency domain, generating 'Fbins' values for the spectrograph. It was important to use an 'in place' discrete fourier transform (DFT) algorithm (@ref-tukey) to conserve memory on the Pico.  An 'in place' calculation means the time samples are presented to the DFT algorithm as real floating point value in a complex128 array, and are swapped out with frequency domain results in that same block of allocated memory. Detectword pico relies on the FFT() function from the very capable FOSS go-fft package (@ref-go-fft).
+The detectword.go function CreateU16SpectFromU16() converts voice samples into a two  dimensional spectrogram array. An input waveform of 'buf_size' samples is normalized and broken into 'Tbins' time segments. Each time segment is filtered by a Hamming window (@ref-hamming) to suppress the discontinuities created by segmentation. The filtered segments are converted to the frequency domain, generating 'Fbins' values for the spectrogram. It was important to use an 'in place' discrete fourier transform (DFT) algorithm (@ref-tukey) to conserve memory on the Pico.  'In place' calculation means the time samples are presented to the DFT algorithm as real floating point values in a complex128 array, and are swapped out with frequency domain results in that same allocated memory. Detectword pico relies on the FFT() function from the very capable FOSS go-fft package (@ref-go-fft).
 
 Figure (2) shows the calculated spectrograms for the words 'on' and 'off'.  Image representations of spectrograms and reduced arrays in this write up encode increasing frequency amplitudes as colors ranging from blue to red. 
 
@@ -53,11 +53,11 @@ Figure (2) shows the calculated spectrograms for the words 'on' and 'off'.  Imag
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-on-4096-250-64.png" width="400" height="300" />
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-off-4096-250-64.png" width="400" height="300" />
 </p>
-Figure (2) Spectrographs of the words 'on' and 'off'; 4096 samples, 64 time bins, and 64 frequency bins
+Figure (2) Spectrograms of the words 'on' and 'off'; 4096 samples, 64 time bins, and 64 frequency bins
 <br />
 <br />
 
-Data reduction of the spectrographs consists of a two stage pooling process, reducing the memory and processing requirements of comparison.  The first pooling operation steps a rectangular window with a size determined by 'block' parameters across the spectrogram, creating a reduced two dimensional array with elements equal to the average value of spectrogram elements under that window position.  The second pooling stage repeats the process returning the peak value of a smaller window stepped across the array which resulted from average pooling. Pooling differs from convolution in that the window positions do not overlap.
+Data reduction of the spectrograms consists of a two stage pooling process, reducing the memory and processing requirements of comparison.  The first pooling operation steps a rectangular window with a size determined by 'block' parameters across the spectrogram, creating a reduced two dimensional array with elements equal to the average value of spectrogram elements under that window position.  The second pooling stage repeats the process returning the peak value of a smaller window stepped across the array which resulted from average pooling. Pooling differs from convolution in that the window positions do not overlap.
 
 Figure (3) shows the reduced spectrograms for the 'on' and 'off' spectrograms of Figure (2).  The smaller peak value arrays are used to predict how closely the target word matches a reference word.
 
@@ -67,40 +67,41 @@ Figure (3) shows the reduced spectrograms for the 'on' and 'off' spectrograms of
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-off-4096-250-64.png" width="200" height="200" />
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-off-4096-250-64.png" width="150" height="150" />
 </p>
-Figure (3) Average and peak pooling results from the spectrographs representing words 'on' and 'off'.
+Figure (3) Average and peak pooling results from the spectrograms representing words 'on' and 'off'.
 <br />
 <br />
 
 The default tuning parameters in Detectword_pico include a frequency bin range of approximately -1.8Khz to 1.8Khz, with time bins ranging from 0sec to approximately 300msec.  The block sizes for average and peak pooling are 8x8 and 4x4, respectively. These values are adequate for single syllable human voice word detection.
 
-While the Pico has sufficient memory to set Detectword_pico's 'buf_size' to 4096 samples, the response time is large-- on the order of 2 seconds.  Setting 'buf_size' to 1024 samples provides reasonably good detection with a greatly reduced response time.  The response time to process single syllable words from 1024 ADC samples is in the hundreds of milliseconds range. The demonstration video above processes a 1024 sample voice waveform.  Figure (4) shows spectrographs from 1024 sample 'on' and 'off' voice captures.
+While the Pico has sufficient memory to set Detectword_pico's 'buf_size' to 4096 samples, the response time is large-- on the order of 2 seconds.  Setting 'buf_size' to 1024 samples provides reasonably good detection with a greatly reduced response time.  The response time to process single syllable words from 1024 ADC samples is in the hundreds of milliseconds range. The demonstration video above processes a 1024 sample voice waveform.  Figure (4) shows spectrograms from 1024 sample 'on' and 'off' voice captures.
 
 <p float="left">
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-on-1024-250-16.png" width="400" height="300" />
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-off-1024-250-16.png" width="400" height="300" />
 </p>
-Figure (4) Spectrographs of the words 'on' and 'off'; 1024 samples, 16 time bins, and 16 frequency bins
+Figure (4) Spectrograms of the words 'on' and 'off'; 1024 samples, 16 time bins, and 16 frequency bins
 <br />
 <br />
 
-Voice waveforms for Detectword_pico are obtained with a piezo microphone into a Maxim 4466 amplifier output to the Pico ADC. In addition to the tuning parameters previously described, Detectword_pico includes threshold parameters to gate capture and remove leading and trailing "quiet" periods.  Capture begins when the ADC detects a sound level above the software parameter 'threshold'. The capture continues until 'buf_size' samples have been collected. The end of the capture buffer is truncated of sounds below 'threshold'.  Removing "quiet" samples from the end of the buffer allows the sample waveform to be normalized in both amplitude and time, improving reference to target comparisons.  Another threshold parameter, 'SpectThresh', limits low amplitude noise in the spectrograms.
+Voice waveforms for Detectword_pico are obtained with a piezo microphone feeding a Maxim 4466 amplifier, with output tied to the Pico ADC. In addition to the tuning parameters previously described, Detectword_pico includes threshold parameters to gate capture and remove leading and trailing "quiet" periods.  Capture begins when the ADC detects a sound level above the software parameter 'threshold'. The capture continues until 'buf_size' samples have been collected. The end of the capture buffer is truncated of sounds below 'threshold'.  Removing "quiet" samples from the beginning and end of the buffer allows the sample waveform to be normalized in both amplitude and time, improving reference to target comparisons.  Another threshold parameter, 'SpectThresh', limits low amplitude noise in the spectrograms.
 
 The parameters used to tune word detection are capture sample size in bytes (buf_size), ADC sampling rate (Tsamp), number of spectrogram time bins (Tbins), number of spectrogram frequency bins (Fbins), pooling block sizes, and noise thresholds (threshold and SpectThresh).
 
 Possible Improvements
 ---------------------
-I included a single pole low pass filter (LPF) between microphone and ADC. Some frequency aliasing exists above Nyquest rate. A higher order LPF would likely improve word detection. Empirically, I found most meaningful data from my voice is between 200Hz-400Hz. The level of aliasing, visible in the spectrographs above, has not prevented reasonable word detection.
+A single pole low pass filter (LPF) between amplifier and ADC suppresses noise and provides dc isolation and level shifting. Some frequency aliasing exists above the Nyquest rate. A higher order LPF would likely improve word detection. Empirically, I found most meaningful data from my voice is between 200Hz-400Hz. The level of aliasing, visible in the spectrograms above, has not prevented reasonable word detection.
 
-Adding automatic gain control at the input would improve detection performance of words spoken at different distances or loudness than the recorded reference words.
+Adding automatic gain control to the amplifier would improve detection performance of words spoken at different distances or loudness than the recorded reference words.
 
-Generating a spectrograph is a parallel process, and the Pico has two cores.  Breaking spectrograph construction into two concurrent processes will reduce the response time.
+Generating a spectrogram is a parallel process, and the Pico has two cores.  Breaking spectrogram construction into two concurrent processes will reduce the response time.
 
 Negative spectrogram frequencies are maintained in memory for image aesthetics only. Negative frequencies are not included in reduction.  Removing these frequencies from spectrogram generation would reduce response time and memory usage.
+
 Allowing spectrogram time bins to overlap would reintroduce valid detection data suppressed by the Hamming filter. The overlaps would improve the spectrogram fidelity, at the expense of increased memory use and processing time.
 
 Conclusions
 -----------
-While machine learning provides powerful tools for speech detection, this project attempts to show simpler techniques exist, specifically for word detection on low cost microcontrollers.  The techniques employed by Detectword_pico provide a reasonably good solution for a voice controlled lamp.
+This project attempts to show that simpler speech detection techniques than machine learning exist, specifically for word detection on low cost microcontrollers.  The techniques employed by Detectword_pico provide a reasonably good solution for a voice controlled lamp.
 
 The Go language (ref-go), and Tinygo compiler (ref-tinygo) are capable and easy to learn tools for embedded systems development. Detectword_pico is written with standard Go libraries, with the exception of the fast and efficient DFT implementation from the go-fft package (ref-go-fft).
 
