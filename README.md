@@ -1,8 +1,8 @@
 Detectword_pico: A Go Spoken Word Detector for the Raspi Pico
 -------------------------------------------------------------
-2022.04.14
+2022.04.18
 <br>
-Reviewer notes: (@ref-tags) will become reference numbers (1), (2)
+Reviewer notes: (@ref-tags) will become reference numbers (1), (2), ...
 
 The Detectword_pico application compares spoken words with predefined reference words, and sets a logic output pin based on the detected word. When the system is powered on, the first two received words become the reference words. Subsequent words are compared to the reference words controlling the output accordingly. The breadboard image below links a demonstration video using words 'on' and 'off' to control a lamp.  Detectword_pico is written in the Go (@go-ref) programming language and compiled with Tinygo (@ref-tinygo).  The hardware target is a Raspberry Pi Pico RP2040 (@ref-pico). The design attempts to achieve reasonable voice control, with minimal resources.
 
@@ -113,8 +113,11 @@ The Tinygo v0.21 compiler is based on Go v1.17.6
 'utils_dw.go' includes functions applicable to a wider range of DSP applications. 
 'fft.go' and 'errors.go' are manually included from the go-fft package, as Tinygo v0.21 does not support all dependencies.
 
+<pre>
 Ray Schuler
 schuler at usa.com
+</pre>
+
 
 References
 ----------
