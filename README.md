@@ -1,9 +1,10 @@
 Detectword_pico: A Go Spoken Word Detector for the Raspi Pico
 -------------------------------------------------------------
 2022.04.14
-Reviewer notes: (@ref-tags) will become reference numbers (1), (2), ... before submission
+<br>
+Reviewer notes: (@ref-tags) will become reference numbers (1), (2)
 
-The Detectword_pico application compares spoken words with a predefined reference word, setting a logic output pin based on the detected word. When the system is powered on, the first two received words become the reference words. Subsequent words are compared to the reference words, and the output pin is set accordingly. The breadboard image below links a demonstration video using words 'on' and 'off' to control a lamp.  Detectword_pico is written in the Go (@go-ref) programming language and compiled with Tinygo (@ref-tinygo).  The hardware target is a Raspberry Pi Pico RP2040 (@ref-pico). The design attempts to achieve reasonable voice control, with minimal resources.
+The Detectword_pico application compares spoken words with predefined reference words, and sets a logic output pin based on the detected word. When the system is powered on, the first two received words become the reference words. Subsequent words are compared to the reference words controlling the output accordingly. The breadboard image below links a demonstration video using words 'on' and 'off' to control a lamp.  Detectword_pico is written in the Go (@go-ref) programming language and compiled with Tinygo (@ref-tinygo).  The hardware target is a Raspberry Pi Pico RP2040 (@ref-pico). The design attempts to achieve reasonable voice control, with minimal resources.
 
 <p align="center">
 <a href="https://youtu.be/cquPffC5l68" title="Video demonstration"><img src="https://img.youtube.com/vi/cquPffC5l68/maxresdefault.jpg" width="350px"/></a>
@@ -12,9 +13,9 @@ The Detectword_pico application compares spoken words with a predefined referenc
 
 Discussion
 ----------
-Detectword_pico is a word detector, also referred to as a 'hot word' or 'wake word' detector. The hardware target is the Raspberry Pi Pico board.  The Pico RP2040 is high function ARM microcontroller with analog inputs, general purpose digital I/O, and a retail cost of 1 USD (2022). Detectword_pico is writen in Go (@ref-go) and compiled to a UF2 firmware with Tinygo (@ref-tinygo), a Go compiler for embedded environments. 
+Detectword_pico is a word detector, also referred to as a 'hot word' or 'wake word' detector. The hardware target is the Raspberry Pi Pico board.  The Pico RP2040 is a high function ARM microcontroller with analog inputs, general purpose digital I/O, and a retail cost of 1 USD (2022). Detectword_pico is written in Go (@ref-go) and compiled to a UF2 firmware file with Tinygo (@ref-tinygo), a Go compiler for embedded environments. 
 
-Spectrograms (@ref-spectrogram) are created, encapsulating time and frequency features into a two dimensional array.  The spectrogram arrays are well suited to image processing techniques.  The spectrogram in Figure (1) represents the word 'raspberry' as captured by the Pico analog to digital converter (ADC).  Spectrogram colors represent frequency amplitudes (vertical), and duration (horizontal), ranging from blue to red representing low and high intensity, respectively.  
+Spectrograms (@ref-spectrogram) are created encapsulating time and frequency features into two dimensional arrays.  These arrays are well suited to image processing techniques.  The spectrogram in Figure (1) represents the word 'raspberry' as captured by the Pico analog to digital converter (ADC).  Spectrogram colors represent frequency amplitudes (vertical), and duration (horizontal). Ranging from blue to red the colors represent low and high intensity, respectively.  
 
 <p float="left">
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/xt-raspberry-4096-250.png" width="400" height="300" />
@@ -26,9 +27,9 @@ Figure (1): A 4096 sample time domain waveform and spectrogram of the spoken wor
 
 The use of spectrograms turns word detection into an image classification problem, often solved with machine learning (ML) techniques like convolutional neural networks (ConvNet) (ref-convnet). ConvNets are incredibly good at classifying images. A wake word detection project on the Pico using machine learning techniques is listed in the references (@ref-ml-pico).
 
-The drawbacks of ML solutions include complexity, processing requirements for training operation, and training data requirements. ML models are trained on machines significantly more powerful than the Pico, and transfered to the target hardware.
+The drawbacks of ML solutions include complexity, processing requirements for training operation, and training data requirements. ML models are trained on machines significantly more powerful than the Pico, and transferred to the target hardware.
 
-Detectword_pico uses data reduction and comparison to affect simple word detection whith less complexity and lower resource requiremnts than ML solutions.  
+Detectword_pico uses data reduction and comparison to affect simple word detection whith less complexity and lower resource requirements than ML solutions.  
 
 Popular 'smart speakers' rely on machine learning techniques and process voice recordings on remote servers, even when the device under control (e.g. a lamp) is inches away.  Sending voice data to servers outside of the end user's control involves privacy issues that may not be justified for single word voice control.
 
@@ -99,7 +100,7 @@ Allowing spectrogram time bins to overlap would reintroduce valid detection data
 
 Conclusions
 -----------
-While machine learning provides powerful tools for speech detection, this project attempts to show simplier techniques exist, specifically for word detection on low cost microcontrollers.  The techniques employed by Detectword_pico provide a reasonably good solution for a voice controlled lamp.
+While machine learning provides powerful tools for speech detection, this project attempts to show simpler techniques exist, specifically for word detection on low cost microcontrollers.  The techniques employed by Detectword_pico provide a reasonably good solution for a voice controlled lamp.
 
 The Go language (ref-go), and Tinygo compiler (ref-tinygo) are capable and easy to learn tools for embedded systems development. Detectword_pico is written with standard Go libraries, with the exception of the fast and efficient DFT implementation from the go-fft package (ref-go-fft).
 
