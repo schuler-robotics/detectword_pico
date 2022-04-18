@@ -1,8 +1,9 @@
 Detectword_pico: A Go Spoken Word Detector for the Raspi Pico
 -------------------------------------------------------------
 2022.04.14
+Reviewer notes: (@ref-tags) will become reference numbers (1), (2), ... before submission
 
-Detectword_pico is a system to compare spoken words with a predefined reference word, setting a logic output pin based on the detected word. When the system is powered on, the first two received words become the reference words. Subsequent words are compared to the reference words, and the output pin is set accordingly. The Detectword_pico circuit image below links to a demonstration video of words 'on' and 'off' controlling a lamp.  The software is written in the Go (@go-ref) programming language and compiled with Tinygo (@ref-gof).  The hardware target is a Raspberry Pi Pico (@ref-pico). The design attempts to achieve reasonable voice control, with minimal resources.
+The Detectword_pico application compares spoken words with a predefined reference word, setting a logic output pin based on the detected word. When the system is powered on, the first two received words become the reference words. Subsequent words are compared to the reference words, and the output pin is set accordingly. The breadboard image below links a demonstration video using words 'on' and 'off' to control a lamp.  Detectword_pico is written in the Go (@go-ref) programming language and compiled with Tinygo (@ref-tinygo).  The hardware target is a Raspberry Pi Pico RP2040 (@ref-pico). The design attempts to achieve reasonable voice control, with minimal resources.
 
 <p align="center">
 <a href="https://youtu.be/cquPffC5l68" title="Video demonstration"><img src="https://img.youtube.com/vi/cquPffC5l68/maxresdefault.jpg" width="350px"/></a>
@@ -11,9 +12,9 @@ Detectword_pico is a system to compare spoken words with a predefined reference 
 
 Discussion
 ----------
-The Detectword_pico project uses Tinygo (ref-tinygo), a Go compiler for embedded environments, to create a word detector, commonly referred to as a 'hot word' or 'wake word' detector. The target hardware is the Raspberry Pi Pico, a low cost and high function ARM microcontroller with analog inputs and general purpose digital I/O.
+Detectword_pico is a word detector, also referred to as a 'hot word' or 'wake word' detector. The hardware target is the Raspberry Pi Pico board.  The Pico RP2040 is high function ARM microcontroller with analog inputs, general purpose digital I/O, and a retail cost of 1 USD (2022). Detectword_pico is writen in Go (@ref-go) and compiled to a UF2 firmware with Tinygo (@ref-tinygo), a Go compiler for embedded environments. 
 
-Popular techniques for spoken word classification involve creating a spectrogram (@ref-spectrogram), which encapsulates time and frequency characteristics into a two dimensional array.  Spectrogram arrays are well suited for image representations, and image processing techniques.  The spectrogram in Figure (1) represents the word 'raspberry' as captured by the Pico analog to digital converter (ADC), and processed by Detectword_pico.  The colors  represent the frequency amplitude in the indexed frequency bin (vertical), during the indexed time bin (horizontal). The colors range from blue to red, representing low and high intensity, respectively.  
+Spectrograms (@ref-spectrogram) are created, encapsulating time and frequency features into a two dimensional array.  The spectrogram arrays are well suited to image processing techniques.  The spectrogram in Figure (1) represents the word 'raspberry' as captured by the Pico analog to digital converter (ADC).  Spectrogram colors represent frequency amplitudes (vertical), and duration (horizontal), ranging from blue to red representing low and high intensity, respectively.  
 
 <p float="left">
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/xt-raspberry-4096-250.png" width="400" height="300" />
@@ -23,10 +24,11 @@ Figure (1): A 4096 sample time domain waveform and spectrogram of the spoken wor
 <br />
 <br />
 
+The use of spectrograms turns word detection into an image classification problem, often solved with machine learning (ML) techniques like convolutional neural networks (ConvNet) (ref-convnet). ConvNets are incredibly good at classifying images. A wake word detection project on the Pico using machine learning techniques is listed in the references (@ref-ml-pico).
 
-Image classification is often accomplished by machine learning techniques (ML) like training a convolutional neural network (ConvNet) (ref-convnet). ConvNets are incredibly good at classifying images, including spectrograph images. A wake word detection project on the Pico using machine learning techniques is listed in the references (@ref-ml-pico).
+The drawbacks of ML solutions include complexity, processing requirements for training operation, and training data requirements. ML models are trained on machines significantly more powerful than the Pico, and transfered to the target hardware.
 
-The drawbacks of training and using machine learning for simple applications include  complexity, large processing and memory demands, and large sets of training data.  The ML model is typically trained on a machine significantly more powerful than the Pico. Detectword_pico uses data reduction and comparison instead of ML, which is well suited to the  resources of the low cost Pico microcontroller.
+Detectword_pico uses data reduction and comparison to affect simple word detection whith less complexity and lower resource requiremnts than ML solutions.  
 
 Popular 'smart speakers' rely on machine learning techniques and process voice recordings on remote servers, even when the device under control (e.g. a lamp) is inches away.  Sending voice data to servers outside of the end user's control involves privacy issues that may not be justified for single word voice control.
 
@@ -86,24 +88,23 @@ The parameters used to tune word detection are capture sample size in bytes (buf
 
 Possible Improvements
 ---------------------
-Word detection would likely improve by low pass filtering the microphone ADC input to limit the aliasing of frequencies above the Nyquest rate.  Empirically, I found most meaningful data from my voice is between 200Hz-400Hz. The generated spectrograms include some aliasing, though  this has not prevented reasonable word detection.
+I included a single pole low pass filter (LPF) between microphone and ADC. Some frequency aliasing exists above Nyquest rate. A higher order LPF would likely improve word detection. Empirically, I found most meaningful data from my voice is between 200Hz-400Hz. The level of aliasing, visible in the spectrographs above, has not prevented reasonable word detection.
 
-Adding automatic gain control to the microphone would improve detection performance for words spoken at different distances or loudness than the recorded reference words.
+Adding automatic gain control at the input would improve detection performance of words spoken at different distances or loudness than the recorded reference words.
 
-Generating a spectrograph is a parallel process, and the Pico has two cores.  Breaking  spectrograph construction into two concurrent processes will reduce the response time.
+Generating a spectrograph is a parallel process, and the Pico has two cores.  Breaking spectrograph construction into two concurrent processes will reduce the response time.
 
-Negative spectrogram frequencies are maintained in detectword_pico for image aesthetics only. These frequencies are not included in pooling reduction.  Removing negative frequencies from the spectrograms will improve processing speed and reduce memory usage.
-
-Allowing the spectrogram time bins to overlap would reintroduce valid detection data suppressed by the Hamming filter, at the expense of increased memory use and response time.
+Negative spectrogram frequencies are maintained in memory for image aesthetics only. Negative frequencies are not included in reduction.  Removing these frequencies from spectrogram generation would reduce response time and memory usage.
+Allowing spectrogram time bins to overlap would reintroduce valid detection data suppressed by the Hamming filter. The overlaps would improve the spectrogram fidelity, at the expense of increased memory use and processing time.
 
 Conclusions
 -----------
-While ConvNets and other machine learning techniques provide powerful tools for speech detection, this project shows they are not strictly required for simple word detection on a low cost microcontroller.  The techniques employed by Detectword_pico provide a reasonably good solution for a voice controlled lamp.
+While machine learning provides powerful tools for speech detection, this project attempts to show simplier techniques exist, specifically for word detection on low cost microcontrollers.  The techniques employed by Detectword_pico provide a reasonably good solution for a voice controlled lamp.
 
-The Go language (ref-go), and the memory efficient Tinygo compiler (ref-tinygo), exceeded my expectations for developing on the Pico.  The code is written with standard Go libraries, with the exception of the memory efficient "in place" DFT implementation from the go-fft package (ref-go-fft).
+The Go language (ref-go), and Tinygo compiler (ref-tinygo) are capable and easy to learn tools for embedded systems development. Detectword_pico is written with standard Go libraries, with the exception of the fast and efficient DFT implementation from the go-fft package (ref-go-fft).
 
-Software Details
-----------------
+Logistics
+---------
 The Tinygo v0.21 compiler is based on Go v1.17.6
 'detectword_pico.go' is the main() entry point of the program
 'detectword.go' includes functions specific to the detectword application.  
@@ -118,6 +119,7 @@ References
 <p>
 (@ref-go) https://go.dev<br>
 (@ref-tinygo) https://github.com/tinygo-org<br>
+(@ref-pico) https://www.raspberrypi.com/products/rp2040/
 (@ref-spectrogram) https://en.wikipedia.org/wiki/Spectrogram<br>
 (@ref-convnet) https://developers.google.com/machine-learning/practica/image-classification/convolutional-neural-networks<br>
 (@ref-ml-pico) https://github.com/henriwoodcock/pico-wake-word<br>
