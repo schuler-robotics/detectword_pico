@@ -88,7 +88,7 @@ Voice waveforms for Detectword_pico are obtained with a piezo microphone feeding
 
 The parameters used to tune word detection are capture sample size in bytes (buf_size), ADC sampling rate (Tsamp), number of spectrogram time bins (Tbins), number of spectrogram frequency bins (Fbins), pooling block sizes, and noise thresholds (threshold and SpectThresh).
 
-Figure (5) shows the complete Detectword_pico process flow, at greatly exaggerated scale. Each reference and target word undergoes the process, and the decision is based on the sum squared error of the final peak pooling stages.
+The complete Detectword_pico process flow, at greatly exaggerated scale, is illustrated in Figure (5). Each reference and target word undergoes the process, and the decision is based on the sum squared error of the final peak pooling stages.
 
 <p float="left">
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/dw-process-sketch-20220419.png" width="800" />
