@@ -118,11 +118,7 @@ The Go language (ref-go), and Tinygo compiler (ref-tinygo) are capable and easy 
 
 Logistics
 ---------
-The Tinygo v0.21 compiler is based on Go v1.17.6
-'detectword_pico.go' is the main() entry point of the program
-'detectword.go' includes functions specific to the detectword application.  
-'utils_dw.go' includes functions applicable to a wider range of DSP applications. 
-'fft.go' and 'errors.go' are manually included from the go-fft package, as Tinygo v0.21 does not support all dependencies.
+The Tinygo v0.21 compiler is based on Go v1.17.6.  'detectword_pico.go' is the main() entry point of the program.  'detectword.go' includes functions specific to the detectword application.  'utils_dw.go' includes functions applicable to a wider range of DSP applications.  'fft.go' and 'errors.go' are manually included from the go-fft package, as Tinygo v0.21 does not support all dependencies.
 
 <pre>
 Ray Schuler
