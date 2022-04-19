@@ -22,7 +22,7 @@ Spectrograms (@ref-spectrogram) are created encapsulating time and frequency fea
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/xt-raspberry-4096-250.png" width="400" height="300" />
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/spect-raspberry-4096-250-64.png" width="400" height="300" />
 </p>
-Figure (1): A 4096 sample time domain waveform and spectrogram of the spoken word ‘raspberry’.
+Figure (1): A 4096 sample time domain waveform and spectrogram of the spoken word ‘raspberry’
 <br />
 <br />
 
@@ -68,7 +68,7 @@ Figure (3) shows the reduced spectrograms for the 'on' and 'off' spectrograms of
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-off-4096-250-64.png" width="200" height="200" />
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-off-4096-250-64.png" width="150" height="150" />
 </p>
-Figure (3) Average and peak pooling results from the spectrograms representing words 'on' and 'off'.
+Figure (3) Average and peak pooling results from the spectrograms representing words 'on' and 'off'
 <br />
 <br />
 
