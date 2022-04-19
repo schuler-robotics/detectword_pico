@@ -120,7 +120,7 @@ Logistics
 ---------
 The Tinygo v0.21 compiler is based on Go v1.17.6.  'detectword_pico.go' is the main() entry point of the program.  'detectword.go' includes functions specific to the detectword application.  'utils_dw.go' includes functions applicable to a wider range of DSP applications.  'fft.go' and 'errors.go' are manually included from the go-fft package, as Tinygo v0.21 does not support all dependencies.
 
-Thank you for taking the time to read this design note.  I welcome your questions and feedback.
+Thank you for your time.  I welcome your questions and feedback.
 
 <pre>
 Ray Schuler
