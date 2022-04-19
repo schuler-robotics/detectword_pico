@@ -2,8 +2,9 @@ Detectword_pico: A Go Spoken Word Detector for the Raspi Pico
 -------------------------------------------------------------
 2022.04.18
 <br>
+<pre>
 Reviewer notes: (@ref-tags) will become reference numbers (1), (2), ...
-
+</pre>
 The Detectword_pico application compares spoken words with predefined reference words, and sets a logic output pin based on the detected word. When the system is powered on, the first two received words become the reference words. Subsequent words are compared to the reference words controlling the output accordingly. The breadboard image below links a demonstration video using words 'on' and 'off' to control a lamp.  Detectword_pico is written in the Go (@go-ref) programming language and compiled with Tinygo (@ref-tinygo).  The hardware target is a Raspberry Pi Pico RP2040 (@ref-pico). The design attempts to achieve reasonable voice control, with minimal resources.
 
 <p align="center">
@@ -86,6 +87,16 @@ Figure (4) Spectrograms of the words 'on' and 'off'; 1024 samples, 16 time bins,
 Voice waveforms for Detectword_pico are obtained with a piezo microphone feeding a Maxim 4466 amplifier, with output tied to the Pico ADC. In addition to the tuning parameters previously described, Detectword_pico includes threshold parameters to gate capture and remove leading and trailing "quiet" periods.  Capture begins when the ADC detects a sound level above the software parameter 'threshold'. The capture continues until 'buf_size' samples have been collected. The end of the capture buffer is truncated of sounds below 'threshold'.  Removing "quiet" samples from the beginning and end of the buffer allows the sample waveform to be normalized in both amplitude and time, improving reference to target comparisons.  Another threshold parameter, 'SpectThresh', limits low amplitude noise in the spectrograms.
 
 The parameters used to tune word detection are capture sample size in bytes (buf_size), ADC sampling rate (Tsamp), number of spectrogram time bins (Tbins), number of spectrogram frequency bins (Fbins), pooling block sizes, and noise thresholds (threshold and SpectThresh).
+
+Figure (5) shows the complete Detectword_pico process flow, at greatly exaggerated scale. Each reference and target word undergoes the process, and the decision is based on the sum squared error of the final peak pooling stages.
+
+<p float="left">
+<img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/dw-process-sketch-20220419.png" width="800" />
+</p>
+Figure (5) Detectword_pico process diagram
+<br />
+<br />
+
 
 Possible Improvements
 ---------------------
