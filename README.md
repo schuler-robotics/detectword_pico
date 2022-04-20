@@ -55,7 +55,7 @@ Figure (2) Spectrograms of the words 'on' and 'off'; 4096 samples, 64 time bins,
 
 Data reduction of the spectrograms consists of a two stage pooling process, reducing the memory and processing requirements of comparison.  The first pooling operation steps a rectangular window with a size determined by 'block' parameters across the spectrogram, creating a reduced two dimensional array with elements equal to the average value of spectrogram elements under that window position.  The second pooling stage repeats the process returning the peak value of a smaller window stepped across the array which resulted from average pooling. Pooling differs from convolution in that the window positions do not overlap.
 
-Figure (3) shows average and peak pooling reduced spectrograms for the words 'on' and 'off'.  The peak value arrays of reference and target are used to predict matching words.
+Figure (3) shows average and peak pooling reduced spectrograms for the words 'on' and 'off'.  The peak value arrays of reference and target are used to predict matching words.  Pooling reductions are performed on positive frequencies, corresponding to top half Detectword_pico spectrogram features.  Symmetric negative frequencies do not provide additional information.
 
 <p float="left">
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-on-4096-250-64.png" width="200" height="200" />
