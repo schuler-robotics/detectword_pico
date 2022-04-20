@@ -9,7 +9,7 @@ The Detectword_pico application compares spoken words with predefined reference 
 
 Discussion
 ----------
-Detectword_pico is a word detector, also referred to as a 'hot word' or 'wake word' detector. The hardware target is the Raspberry Pi Pico board.  The Pico RP2040 is a high function ARM microcontroller with analog inputs, general purpose digital I/O, and a retail cost of 1 USD (2022). Detectword_pico is written in Go <a href="https://go.dev">(1) and compiled to a UF2 firmware file with Tinygo <a href="https://github.com/tinygo-org">(2)</a>, a Go compiler for embedded environments. 
+Detectword_pico is a word detector, also referred to as a 'hot word' or 'wake word' detector. The hardware target is the Raspberry Pi Pico board.  The Pico RP2040 is a high function ARM microcontroller with analog inputs, general purpose digital I/O, and a retail cost of 1 USD (2022). Detectword_pico is written in Go <a href="https://go.dev">(1)</a> and compiled to Pico UF2 firmware with Tinygo <a href="https://github.com/tinygo-org">(2)</a>, a Go compiler for embedded environments. 
 
 Spectrograms <a href="https://en.wikipedia.org/wiki/Spectrogram">(4)</a> are created encapsulating time and frequency features into two dimensional arrays.  These arrays are well suited to image processing techniques.  The spectrogram in Figure (1) represents the word 'raspberry' as captured by the Pico analog to digital converter (ADC).  Spectrogram colors represent frequency amplitudes (vertical), and duration (horizontal). Ranging from blue to red the colors represent low and high intensity, respectively.  
 
@@ -55,7 +55,7 @@ Figure (2) Spectrograms of the words 'on' and 'off'; 4096 samples, 64 time bins,
 
 Data reduction of the spectrograms consists of a two stage pooling process, reducing the memory and processing requirements of comparison.  The first pooling operation steps a rectangular window with a size determined by 'block' parameters across the spectrogram, creating a reduced two dimensional array with elements equal to the average value of spectrogram elements under that window position.  The second pooling stage repeats the process returning the peak value of a smaller window stepped across the array which resulted from average pooling. Pooling differs from convolution in that the window positions do not overlap.
 
-Figure (3) shows the reduced spectrograms for the 'on' and 'off' spectrograms of Figure (2).  The smaller peak value arrays are used to predict how closely the target word matches a reference word.
+Figure (3) shows average and peak pooling reduced spectrograms for the words 'on' and 'off'.  The peak value arrays of reference and target are used to predict matching words.
 
 <p float="left">
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-on-4096-250-64.png" width="200" height="200" />
@@ -63,7 +63,7 @@ Figure (3) shows the reduced spectrograms for the 'on' and 'off' spectrograms of
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-avg-off-4096-250-64.png" width="200" height="200" />
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/pool-peak-off-4096-250-64.png" width="150" height="150" />
 </p>
-Figure (3) Average and peak pooling results from the spectrograms representing words 'on' and 'off'
+Figure (3) Average pooling (larger arrays) and peak pooling (smaller arrays) reduced spectrogram representations of the words 'on' and 'off'
 <br />
 <br />
 
@@ -109,7 +109,7 @@ Conclusions
 -----------
 This project attempts to show that simpler speech detection techniques than machine learning exist, specifically for word detection on low cost microcontrollers.  The techniques employed by Detectword_pico provide a reasonably good solution for a voice controlled lamp.
 
-The Go language <a href="https://go.dev">(1), and Tinygo compiler (ref-tinygo) are capable and easy to learn tools for embedded systems development. Detectword_pico is written with standard Go libraries, with the exception of the fast and efficient DFT implementation from the go-fft package <a href="https://github.com/ledyba/go-fft/blob/master/LICENSE">(9)</a>.
+The Go language <a href="https://go.dev">(1)</a>, and Tinygo compiler (ref-tinygo) are capable and easy to learn tools for embedded systems development. Detectword_pico is written with standard Go libraries, with the exception of the fast and efficient DFT implementation from the go-fft package <a href="https://github.com/ledyba/go-fft/blob/master/LICENSE">(9)</a>.
 
 Logistics
 ---------
