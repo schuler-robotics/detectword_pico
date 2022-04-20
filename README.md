@@ -1,11 +1,17 @@
+
+<a href="https://github.com/tinygo-org">(2)</a><br>
+<a href="https://www.raspberrypi.com/products/rp2040/">(3)</a><br>
+<a href="https://en.wikipedia.org/wiki/Spectrogram">(4)</a><br>
+<a href="https://developers.google.com/machine-learning/practica/image-classification/convolutional-neural-networks">(5)</a><br>
+<a href="https://github.com/henriwoodcock/pico-wake-word">(6)</a><br>
+<a href="https://stackoverflow.com/questions/5418951/what-is-the-hamming-window-for">(7)</a><br>
+<a href="https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm">(8)</a><br>
+<a href="https://github.com/ledyba/go-fft/blob/master/LICENSE">(9)</a><br>
+
+
 Detectword_pico: A Go Spoken Word Detector for the Raspi Pico
 -------------------------------------------------------------
-2022.04.18
-<br>
-<pre>
-Reviewer notes: (@ref-tags) will become reference numbers (1), (2), ...
-</pre>
-The Detectword_pico application compares spoken words with predefined reference words, and sets a logic output pin based on the detected word. When the system is powered on, the first two received words become the reference words. Subsequent words are compared to the reference words controlling the output accordingly. The breadboard image below links a demonstration video using words 'on' and 'off' to control a lamp.  Detectword_pico is written in the Go (@go-ref) programming language and compiled with Tinygo (@ref-tinygo).  The hardware target is a Raspberry Pi Pico RP2040 (@ref-pico). The design attempts to achieve reasonable voice control, with minimal resources.
+The Detectword_pico application compares spoken words with predefined reference words, and sets a logic output pin based on the detected word. When the system is powered on, the first two received words become the reference words. Subsequent words are compared to the reference words controlling the output accordingly. The breadboard image below links a demonstration video using words 'on' and 'off' to control a lamp.  Detectword_pico is written in the Go <a href="https://go.dev">(1)</a><br> programming language and compiled with Tinygo (2).  The hardware target is a Raspberry Pi Pico RP2040 (3). The design attempts to achieve reasonable voice control, with minimal resources.
 
 <p align="center">
 <a href="https://youtu.be/cquPffC5l68" title="Video demonstration"><img src="https://img.youtube.com/vi/cquPffC5l68/maxresdefault.jpg" width="350px"/></a>
@@ -14,9 +20,9 @@ The Detectword_pico application compares spoken words with predefined reference 
 
 Discussion
 ----------
-Detectword_pico is a word detector, also referred to as a 'hot word' or 'wake word' detector. The hardware target is the Raspberry Pi Pico board.  The Pico RP2040 is a high function ARM microcontroller with analog inputs, general purpose digital I/O, and a retail cost of 1 USD (2022). Detectword_pico is written in Go (@ref-go) and compiled to a UF2 firmware file with Tinygo (@ref-tinygo), a Go compiler for embedded environments. 
+Detectword_pico is a word detector, also referred to as a 'hot word' or 'wake word' detector. The hardware target is the Raspberry Pi Pico board.  The Pico RP2040 is a high function ARM microcontroller with analog inputs, general purpose digital I/O, and a retail cost of 1 USD (2022). Detectword_pico is written in Go (1) and compiled to a UF2 firmware file with Tinygo (2), a Go compiler for embedded environments. 
 
-Spectrograms (@ref-spectrogram) are created encapsulating time and frequency features into two dimensional arrays.  These arrays are well suited to image processing techniques.  The spectrogram in Figure (1) represents the word 'raspberry' as captured by the Pico analog to digital converter (ADC).  Spectrogram colors represent frequency amplitudes (vertical), and duration (horizontal). Ranging from blue to red the colors represent low and high intensity, respectively.  
+Spectrograms (4) are created encapsulating time and frequency features into two dimensional arrays.  These arrays are well suited to image processing techniques.  The spectrogram in Figure (1) represents the word 'raspberry' as captured by the Pico analog to digital converter (ADC).  Spectrogram colors represent frequency amplitudes (vertical), and duration (horizontal). Ranging from blue to red the colors represent low and high intensity, respectively.  
 
 <p float="left">
 <img src="https://github.com/schuler-robotics/detectword_pico/blob/master/images/xt-raspberry-4096-250.png" width="400" height="300" />
@@ -26,7 +32,7 @@ Figure (1): A 4096 sample time domain waveform and spectrogram of the spoken wor
 <br />
 <br />
 
-The use of spectrograms turns word detection into an image classification problem, often solved with machine learning (ML) techniques like convolutional neural networks (ConvNet) (ref-convnet). ConvNets are incredibly good at classifying images. A wake word detection project on the Pico using machine learning techniques is listed in the references (@ref-ml-pico).
+The use of spectrograms turns word detection into an image classification problem, often solved with machine learning (ML) techniques like convolutional neural networks (CNN) (5). CNNs are incredibly good at classifying images. A wake word detection project on the Pico using machine learning techniques is listed in the references (6).
 
 The drawbacks of ML solutions include complexity, processing requirements for training operation, and training data requirements. ML models are trained on machines significantly more powerful than the Pico, and transferred to the target hardware.
 
@@ -46,7 +52,7 @@ The Process
 -----------
 Upon powering up, detectword_pico captures two reference words with one of the Pico's ADC.  These reference words are normalized in both amplitude and time, before being converted to spectrograms and reduction techniques are applied.  The same process is applied to subsequent spoken words, and a sum squared error of the reduced data between the reference and target word is calculated.  This sum squared error is used to predict if the target word matches one of the reference words.  The 0V-3.3V logic state of a GPIO pin tracks the last detected reference word. For example 3.3V for 'on', and 0V for 'off'.  When neither reference word is detected, the GPIO state remains unchanged.
 
-The detectword.go function CreateU16SpectFromU16() converts voice samples into a two  dimensional spectrogram array. An input waveform of 'buf_size' samples is normalized and broken into 'Tbins' time segments. Each time segment is filtered by a Hamming window (@ref-hamming) to suppress the discontinuities created by segmentation. The filtered segments are converted to the frequency domain, generating 'Fbins' values for the spectrogram. It was important to use an 'in place' discrete fourier transform (DFT) algorithm (@ref-tukey) to conserve memory on the Pico.  'In place' calculation means the time samples are presented to the DFT algorithm as real floating point values in a complex128 array, and are swapped out with frequency domain results in that same allocated memory. Detectword pico relies on the FFT() function from the very capable FOSS go-fft package (@ref-go-fft).
+The detectword.go function CreateU16SpectFromU16() converts voice samples into a two  dimensional spectrogram array. An input waveform of 'buf_size' samples is normalized and broken into 'Tbins' time segments. Each time segment is filtered by a Hamming window (7) to suppress the discontinuities created by segmentation. The filtered segments are converted to the frequency domain, generating 'Fbins' values for the spectrogram. It was important to use an 'in place' discrete fourier transform (DFT) algorithm (8) to conserve memory on the Pico.  'In place' calculation means the time samples are presented to the DFT algorithm as real floating point values in a complex128 array, and are swapped out with frequency domain results in that same allocated memory. Detectword pico relies on the FFT() function from the very capable FOSS go-fft package (9).
 
 Figure (2) shows the calculated spectrograms for the words 'on' and 'off'.  Image representations of spectrograms and reduced arrays in this write up encode increasing frequency amplitudes as colors ranging from blue to red. 
 
@@ -114,7 +120,7 @@ Conclusions
 -----------
 This project attempts to show that simpler speech detection techniques than machine learning exist, specifically for word detection on low cost microcontrollers.  The techniques employed by Detectword_pico provide a reasonably good solution for a voice controlled lamp.
 
-The Go language (ref-go), and Tinygo compiler (ref-tinygo) are capable and easy to learn tools for embedded systems development. Detectword_pico is written with standard Go libraries, with the exception of the fast and efficient DFT implementation from the go-fft package (ref-go-fft).
+The Go language (1), and Tinygo compiler (ref-tinygo) are capable and easy to learn tools for embedded systems development. Detectword_pico is written with standard Go libraries, with the exception of the fast and efficient DFT implementation from the go-fft package (9).
 
 Logistics
 ---------
@@ -131,13 +137,13 @@ schuler at usa.com
 References
 ----------
 <p>
-(@ref-go) https://go.dev<br>
-(@ref-tinygo) https://github.com/tinygo-org<br>
-(@ref-pico) https://www.raspberrypi.com/products/rp2040/
-(@ref-spectrogram) https://en.wikipedia.org/wiki/Spectrogram<br>
-(@ref-convnet) https://developers.google.com/machine-learning/practica/image-classification/convolutional-neural-networks<br>
-(@ref-ml-pico) https://github.com/henriwoodcock/pico-wake-word<br>
-(@ref-hamming) https://stackoverflow.com/questions/5418951/what-is-the-hamming-window-for<br>
-(@ref-tukey) https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm<br>
-(@ref-go-fft) https://github.com/ledyba/go-fft/blob/master/LICENSE<br>
+(1) https://go.dev<br>
+(2) https://github.com/tinygo-org<br>
+(3) https://www.raspberrypi.com/products/rp2040/
+(4) https://en.wikipedia.org/wiki/Spectrogram<br>
+(5) https://developers.google.com/machine-learning/practica/image-classification/convolutional-neural-networks<br>
+(6) https://github.com/henriwoodcock/pico-wake-word<br>
+(7) https://stackoverflow.com/questions/5418951/what-is-the-hamming-window-for<br>
+(8) https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm<br>
+(9) https://github.com/ledyba/go-fft/blob/master/LICENSE<br>
 </p>
