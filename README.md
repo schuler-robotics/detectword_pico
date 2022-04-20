@@ -113,7 +113,7 @@ The Go language <a href="https://go.dev">(1)</a>, and Tinygo compiler (ref-tinyg
 
 Logistics
 ---------
-The Tinygo v0.21 compiler is based on Go v1.17.6.  'detectword_pico.go' is the main() entry point of the program.  'detectword.go' includes functions specific to the detectword application.  'utils_dw.go' includes functions applicable to a wider range of DSP applications.  'fft.go' and 'errors.go' are manually included from the go-fft package, as Tinygo v0.21 does not support all dependencies.
+The Tinygo v0.21 compiler is based on Go v1.17.6.  'detectword_pico.go' is the main() entry point of the program.  'detectword.go' includes functions specific to the detectword application.  'utils_dw.go' includes functions applicable to a wider range of DSP applications.  'fft.go' and 'errors.go' are manually included from the go-fft package, as Tinygo v0.21 does not support all dependencies. Plots in this write up were generated with GNU Octave <a href="https://www.gnu.org/software/octave/index">(10)</a>.
 
 Thank you for your time.  I welcome your questions and feedback.
 
@@ -135,4 +135,5 @@ References
 (7) https://stackoverflow.com/questions/5418951/what-is-the-hamming-window-for<br>
 (8) https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm<br>
 (9) https://github.com/ledyba/go-fft/blob/master/LICENSE<br>
+(10) https://www.gnu.org/software/octave/index<br>
 </p>
